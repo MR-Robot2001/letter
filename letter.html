@@ -1,0 +1,134 @@
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Form</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+    }
+    .container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        text-align: center;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    textarea {
+        height: 150px;
+    }
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+<div>
+<form name="submit-to-google-sheet">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="fromaddress">From Address:</label>
+            <input type="text" id="from-address" name="fromaddress">
+        </div>
+        <div class="form-group">
+            <label for="toaddress">To Address:</label>
+            <input type="text" id="to-address" name="toaddress">
+        </div>
+        <div class="form-group">
+            <label for="lettercontent">Letter Content:</label>
+            <textarea id="letter-content" name="lettercontent" required></textarea>
+    
+   
+   
+             <div id="word-count-info" style="font-size: 12px; color: #666;">Words used: 0 / 350</div>
+        </div>
+        <input type="submit" value="Submit" id="submit-btn" onclick="return confirmSubmit()"><div>Wait after Clicking Submit to Redirect to Payments Page !</div>
+<div id="loading-ring" style="display: none;"></div>
+    </form>
+</div>
+     <script>
+    function confirmSubmit() {
+        return window.confirm("Are you sure you want to submit? Please review all details as they cannot be changed.");
+    }
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx1HWcMMa4Pn0lY5-Xj4h6vQiDevaBOeuVdSL5u0UY8dL_XLd8eLvoJYQ9Vih7QUYwjRA/exec';
+    const form = document.forms['submit-to-google-sheet'];
+    const letterContentTextarea = document.getElementById('letter-content');
+    const wordCountInfo = document.getElementById('word-count-info');
+    const wordLimit = 350;
+
+    // Function to update word count information
+    function updateWordCount() {
+        const letterContent = letterContentTextarea.value;
+        const wordCount = letterContent.trim().split(/\s+/).length;
+        wordCountInfo.textContent = `Words used: ${wordCount} / ${wordLimit}`;
+    }
+
+    // Initial update
+    updateWordCount();
+
+    // Add event listener to textarea for input event
+    letterContentTextarea.addEventListener('input', updateWordCount);
+
+    // Add event listener to form for submit event
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const letterContent = letterContentTextarea.value;
+        const wordCount = letterContent.trim().split(/\s+/).length;
+
+        if (wordCount > wordLimit) {
+            alert('Letter content exceeds the word limit of 350 words.');
+            return;
+        }
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+            .then(response => {
+                alert('Form submitted successfully! Please Wait !.....');
+                // Redirect to Google.com
+                window.location.href = 'https://rzp.io/l/krdYof84jj';
+            })
+            .catch(error => alert('Error! Please Resubmit the form'));
+
+
+
+    });
+</script>
